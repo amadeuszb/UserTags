@@ -1,0 +1,11 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 9002
+  adminConnectors:
+    - type: http
+      port: 9003
+logging:
+  level: INFO
+login: admin
+password: password
