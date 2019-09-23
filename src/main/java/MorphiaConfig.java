@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 public class MorphiaConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(MorphiaConfig.class);
-    private static String dbName = "usersAmad"; //todo: Properties
+    private static String dbName;
     private Datastore datastore;
+
+    public MorphiaConfig(String dbName) {
+        this.dbName = dbName;
+    }
 
     public Datastore getDatastore() {
         if (datastore == null) {

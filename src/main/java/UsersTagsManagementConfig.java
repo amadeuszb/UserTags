@@ -1,14 +1,22 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 
-import javax.validation.constraints.NotEmpty;
 
 class UsersTagsManagementConfig extends Configuration {
 
     public String password;
 
-
     public String login;
+
+    public String databaseName;
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
 
     @JsonProperty
     public String getPassword() {
@@ -29,4 +37,5 @@ class UsersTagsManagementConfig extends Configuration {
     public void setLogin(String login) {
         this.login = login;
     }
+
 }

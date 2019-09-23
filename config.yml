@@ -9,3 +9,4 @@ logging:
   level: INFO
 login: admin
 password: password
+databaseName: usersAmad

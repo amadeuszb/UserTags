@@ -35,14 +35,15 @@ public class UsersTagsManagementApplication extends Application<UsersTagsManagem
     public void initialize(Bootstrap<UsersTagsManagementConfig> bootstrap) {
         modelMapper = new ModelMapper();
         super.initialize(bootstrap);
-        datastore = new MorphiaConfig().getDatastore();
-        usersTagDao = new UsersTagDAO(datastore);
-        usersTagService = new UsersTagService(usersTagDao, modelMapper);
+
     }
 
     @Override
     public void run(UsersTagsManagementConfig configuration, Environment environment) {
         LOG.info("Application Users Management Started");
+        datastore = new MorphiaConfig(configuration.getDatabaseName()).getDatastore();
+        usersTagDao = new UsersTagDAO(datastore);
+        usersTagService = new UsersTagService(usersTagDao, modelMapper);
         final UserTagResource personService = new UserTagResource(usersTagService, environment.getValidator());
         initializeAuth(environment, configuration.getPassword(), configuration.getLogin());
         environment.jersey().register(new RequestExceptionMapper());

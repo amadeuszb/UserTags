@@ -1,6 +1,7 @@
 package auth;
 
-import auth.User;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
@@ -8,9 +9,6 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 public class AppAuthenticator implements Authenticator<BasicCredentials, User> {
    
@@ -28,7 +26,7 @@ public class AppAuthenticator implements Authenticator<BasicCredentials, User> {
         this.login = login;
     }
     @Override
-    public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException { //TODO
+    public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
         if (VALID_USERS.containsKey(credentials.getUsername()) && password.equals(credentials.getPassword())) {
             return Optional.of(new User(credentials.getUsername(), VALID_USERS.get(credentials.getUsername())));
         }
