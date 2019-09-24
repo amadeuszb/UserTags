@@ -1,41 +1,26 @@
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 class UsersTagsManagementConfig extends Configuration {
+    public Authentication authentication;
+    public Database database;
 
-    public String password;
+    @Getter
+    @Setter
+    public class Authentication {
+        public String password;
 
-    public String login;
-
-    public String databaseName;
-
-    public String getDatabaseName() {
-        return databaseName;
+        public String login;
     }
 
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
+    @Getter
+    @Setter
+    public class Database {
+        public String name;
     }
 
-    @JsonProperty
-    public String getPassword() {
-        return password;
-    }
-
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @JsonProperty
-    public String getLogin() {
-        return login;
-    }
-
-    @JsonProperty
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
 }

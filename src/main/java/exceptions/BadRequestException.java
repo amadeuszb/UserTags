@@ -1,10 +1,13 @@
 package exceptions;
 
+
+import org.eclipse.jetty.server.Response;
+
 public class BadRequestException extends Throwable {
     private int code;
 
     public BadRequestException() {
-        this(500);
+        this(Response.SC_BAD_REQUEST);
     }
 
     public BadRequestException(int code) {
@@ -18,6 +21,10 @@ public class BadRequestException extends Throwable {
     public BadRequestException(int code, String message, Throwable throwable) {
         super(message, throwable);
         this.code = code;
+    }
+
+    public BadRequestException(String message) {
+        this(Response.SC_BAD_REQUEST, message);
     }
 
     public int getCode() {

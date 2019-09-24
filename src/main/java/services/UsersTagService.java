@@ -17,8 +17,6 @@ public class UsersTagService implements UserTagService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsersTagService.class);
     private UserTagDAO usersTagsDAO;
-    private BadRequestException userTagsDoesNotExistException = new BadRequestException(404, "User Tag does not exist");
-    private BadRequestException incorrectFieldsException = new BadRequestException(404, "Incorrect Fields");
     private ModelMapper modelMapper;
 
     public UsersTagService(UserTagDAO dao, ModelMapper modelMapper) {
@@ -30,14 +28,15 @@ public class UsersTagService implements UserTagService {
     public UserTagDTO getById(String id) throws BadRequestException {
         UserTagEntity userTagEntity = usersTagsDAO.getById(id);
         if (userTagEntity == null) {
-            throw userTagsDoesNotExistException;
+            LOG.error("Incorrect UUID provided: {}, user Tag does not exist", id);
+            throw new BadRequestException("User Tag does not exist");
         }
         UserTagDTO userTagDTO = modelMapper.map(userTagEntity, UserTagDTO.class);
         return userTagDTO;
     }
 
     @Override
-    public List<UserTagDTO> getAllWithParams(String userId,Long offset, Long limit) {
+    public List<UserTagDTO> getAllWithParams(String userId, Long offset, Long limit) {
         List<UserTagEntity> userTagEntity = usersTagsDAO.getAllWithParams(userId, offset, limit);
         Type listType = new TypeToken<List<UserTagDTO>>() {
         }.getType();
@@ -47,7 +46,14 @@ public class UsersTagService implements UserTagService {
 
     @Override
     public void removeByUserId(String userId) throws BadRequestException {
-        usersTagsDAO.removeByUserId(UUID.fromString(userId));
+        UUID id;
+        try {
+            id = UUID.fromString(userId);
+        } catch (Exception e) {
+            LOG.error("Incorrect UUID provided to remove {}", userId);
+            throw new BadRequestException("Incorrect UUID");
+        }
+        usersTagsDAO.removeByUserId(id);
     }
 
     @Override
@@ -69,6 +75,9 @@ public class UsersTagService implements UserTagService {
     }
 
     private void validateUserTag(UserTagDTO userTagDTO) throws BadRequestException {
-        if (userTagDTO.getTag().isEmpty()) throw incorrectFieldsException;
+        if (userTagDTO.getTag().isEmpty()) {
+            LOG.error("Incorrect fields provided");
+            throw new BadRequestException("Incorrect Fields");
+        }
     }
 }

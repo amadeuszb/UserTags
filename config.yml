@@ -7,6 +7,8 @@ server:
       port: 9003
 logging:
   level: INFO
-login: admin
-password: password
-databaseName: usersAmad
+authentication:
+  login: admin
+  password: password
+database:
+  name: usersAmad

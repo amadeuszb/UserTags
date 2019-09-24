@@ -41,11 +41,11 @@ public class UsersTagsManagementApplication extends Application<UsersTagsManagem
     @Override
     public void run(UsersTagsManagementConfig configuration, Environment environment) {
         LOG.info("Application Users Management Started");
-        datastore = new MorphiaConfig(configuration.getDatabaseName()).getDatastore();
+        datastore = new MorphiaConfig(configuration.getDatabase().getName()).getDatastore();
         usersTagDao = new UsersTagDAO(datastore);
         usersTagService = new UsersTagService(usersTagDao, modelMapper);
-        final UserTagResource personService = new UserTagResource(usersTagService, environment.getValidator());
-        initializeAuth(environment, configuration.getPassword(), configuration.getLogin());
+        final UserTagResource personService = new UserTagResource(usersTagService);
+        initializeAuth(environment, configuration.getAuthentication().getPassword(), configuration.getAuthentication().getLogin());
         environment.jersey().register(new RequestExceptionMapper());
         environment.jersey().register(personService);
     }
