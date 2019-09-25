@@ -1,14 +1,13 @@
 package services;
 
 import dto.UserTagDTO;
+import dto.UserTagListDTO;
 import exceptions.BadRequestException;
-
-import java.util.List;
 
 public interface UserTagService {
     UserTagDTO getById(String id) throws BadRequestException;
 
-    List<UserTagDTO> getAllWithParams(String userId, Long offset, Long limit);
+    UserTagListDTO getAllWithParams(String userId, Long offset, Long limit);
 
     void removeByUserId(String id) throws BadRequestException;
 

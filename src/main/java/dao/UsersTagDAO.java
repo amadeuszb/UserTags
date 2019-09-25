@@ -1,6 +1,5 @@
 package dao;
 
-import com.mongodb.DuplicateKeyException;
 import entity.UserTagEntity;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
@@ -10,12 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class UsersTagDAO implements UserTagDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsersTagDAO.class);
-
     private Datastore datastore;
 
     public UsersTagDAO(Datastore datastore) {
@@ -36,18 +33,25 @@ public class UsersTagDAO implements UserTagDAO {
     }
 
     @Override
-    public List<UserTagEntity> getAllWithParams(String userId,Long offset, Long limit) {
+    public List<UserTagEntity> getAllWithParams(String userId, Long offset, Long limit) {
         LOG.info("Querying database about users with params userId: {}, offset: {}, limit: {}", userId, offset, limit);
         Query<UserTagEntity> query = datastore.find(UserTagEntity.class);
-        if(userId != null) {
+        query.order("userId");
+        if (userId != null) {
             query.field("userId").equal(UUID.fromString(userId));
-        }if (offset != null) {
+        }
+        if (offset != null) {
             query.offset(offset.intValue());
         }
         if (limit != null) {
             query.limit(limit.intValue());
         }
         return query.asList();
+    }
+
+    @Override
+    public Long getAmountOfTags() {
+        return datastore.getCount(UserTagEntity.class);
     }
 
     @Override
@@ -76,4 +80,5 @@ public class UsersTagDAO implements UserTagDAO {
         LOG.info("Adding userTag with id: {} in database", userTag.getId());
         datastore.save(userTag);
     }
+
 }

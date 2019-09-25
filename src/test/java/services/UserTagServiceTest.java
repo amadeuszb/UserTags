@@ -58,7 +58,7 @@ public class UserTagServiceTest {
         sampleListDTO.add(userTagDto);
         sampleList.add(userTagEntity);
         when(userDAO.getAllWithParams(any(), anyLong(), anyLong())).thenReturn(sampleList);
-        List<UserTagDTO> result = userService.getAllWithParams(null, 0L, 20L);
+        List<UserTagDTO> result = userService.getAllWithParams(null, 0L, 20L).getResponse();
         assertEquals(1, result.size());
     }
 

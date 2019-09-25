@@ -2,6 +2,7 @@ package services;
 
 import dao.UserTagDAO;
 import dto.UserTagDTO;
+import dto.UserTagListDTO;
 import entity.UserTagEntity;
 import exceptions.BadRequestException;
 import org.modelmapper.ModelMapper;
@@ -36,12 +37,13 @@ public class UsersTagService implements UserTagService {
     }
 
     @Override
-    public List<UserTagDTO> getAllWithParams(String userId, Long offset, Long limit) {
+    public UserTagListDTO getAllWithParams(String userId, Long offset, Long limit) {
         List<UserTagEntity> userTagEntity = usersTagsDAO.getAllWithParams(userId, offset, limit);
         Type listType = new TypeToken<List<UserTagDTO>>() {
         }.getType();
         List<UserTagDTO> userTagDTOList = modelMapper.map(userTagEntity, listType);
-        return userTagDTOList;
+        UserTagListDTO response = new UserTagListDTO(userTagDTOList, offset, limit, usersTagsDAO.getAmountOfTags());
+        return response;
     }
 
     @Override

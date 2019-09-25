@@ -1,6 +1,5 @@
 package dao;
 
-import com.mongodb.DuplicateKeyException;
 import entity.UserTagEntity;
 
 import java.util.List;
@@ -10,6 +9,8 @@ public interface UserTagDAO {
     UserTagEntity getById(String id);
 
     List<UserTagEntity> getAllWithParams(String userId, Long offset, Long limit);
+
+    Long getAmountOfTags();
 
     void removeByUserId(UUID id);
 
