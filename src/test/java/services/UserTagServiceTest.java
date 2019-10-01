@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 public class UserTagServiceTest {
     @Mock
     UserTagDAO userDAO;
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     private UserTagService userService;
     private UUID uuid1 = UUID.randomUUID();
@@ -38,7 +38,7 @@ public class UserTagServiceTest {
     @Before
     public void init() {
         modelMapper = new ModelMapper();
-        userService = new UsersTagService(userDAO, modelMapper);
+        userService = new UsersTagService(userDAO, modelMapper, null);
         listUserTagDTO = new LinkedList<>();
         listUserTagDTO.add(userTagDto);
         listUserTagDTO.add(userTagDto);
@@ -61,7 +61,6 @@ public class UserTagServiceTest {
         List<UserTagDTO> result = userService.getAllWithParams(null, 0L, 20L).getResponse();
         assertEquals(1, result.size());
     }
-
 
     @Test
     public void updateShouldUpdateUserTag() throws BadRequestException {

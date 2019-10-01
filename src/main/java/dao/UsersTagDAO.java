@@ -19,22 +19,16 @@ public class UsersTagDAO implements UserTagDAO {
         this.datastore = datastore;
     }
 
-    private void filterQueryToUUID(Query<UserTagEntity> query, String fieldName, UUID value) {
-        if (value != null && !value.equals("")) {
-            query.field(fieldName).equal(value);
-        }
-    }
-
     @Override
     public UserTagEntity getById(String id) {
-        LOG.info("Querying database about User with id: {}", id);
+        LOG.info("Querying database about UserTag with id: {}", id);
         return datastore
                 .get(UserTagEntity.class, UUID.fromString(id));
     }
 
     @Override
     public List<UserTagEntity> getAllWithParams(String userId, Long offset, Long limit) {
-        LOG.info("Querying database about users with params userId: {}, offset: {}, limit: {}", userId, offset, limit);
+        LOG.info("Querying database about UserTag with params userId: {}, offset: {}, limit: {}", userId, offset, limit);
         Query<UserTagEntity> query = datastore.find(UserTagEntity.class);
         query.order("userId");
         if (userId != null) {

@@ -5,8 +5,6 @@ plugins {
 group 'users-tokens-management'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
@@ -16,7 +14,9 @@ repositories {
 }
 dependencies {
     compile "org.quartz-scheduler:quartz:2.3.0"
-
+    compile "io.github.openfeign:feign-okhttp:9.3.1"
+    compile "io.github.openfeign:feign-gson:9.3.1"
+    compile "io.github.openfeign:feign-slf4j:9.3.1"
     compile "io.dropwizard:dropwizard-auth:1.0.0"
     compile 'org.modelmapper:modelmapper:2.3.0'
     compile 'commons-validator:commons-validator:1.4.1'

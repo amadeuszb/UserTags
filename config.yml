@@ -12,3 +12,7 @@ authentication:
   password: password
 database:
   name: usersAmad
+userApi: http://localhost:9000/user
+period:
+  zodiac: 10
+  birth: 5

@@ -1,5 +1,6 @@
 package services;
 
+import dto.UserListDTO;
 import dto.UserTagDTO;
 import dto.UserTagListDTO;
 import exceptions.BadRequestException;
@@ -14,4 +15,6 @@ public interface UserTagService {
     void update(UserTagDTO userTagDTO) throws BadRequestException;
 
     String add(UserTagDTO userTagDTO) throws BadRequestException;
+
+    UserListDTO getUsersWithoutTag(Long limit, Long offset);
 }

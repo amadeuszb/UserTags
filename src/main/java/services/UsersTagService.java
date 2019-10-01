@@ -1,6 +1,9 @@
 package services;
 
+import clientapi.UserClient;
 import dao.UserTagDAO;
+import dto.UserDTO;
+import dto.UserListDTO;
 import dto.UserTagDTO;
 import dto.UserTagListDTO;
 import entity.UserTagEntity;
@@ -13,14 +16,17 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UsersTagService implements UserTagService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsersTagService.class);
     private UserTagDAO usersTagsDAO;
     private ModelMapper modelMapper;
+    private UserClient userClient;
 
-    public UsersTagService(UserTagDAO dao, ModelMapper modelMapper) {
+    public UsersTagService(UserTagDAO dao, ModelMapper modelMapper, UserClient userClient) {
+        this.userClient = userClient;
         this.usersTagsDAO = dao;
         this.modelMapper = modelMapper;
     }
@@ -32,8 +38,7 @@ public class UsersTagService implements UserTagService {
             LOG.error("Incorrect UUID provided: {}, user Tag does not exist", id);
             throw new BadRequestException("User Tag does not exist");
         }
-        UserTagDTO userTagDTO = modelMapper.map(userTagEntity, UserTagDTO.class);
-        return userTagDTO;
+        return modelMapper.map(userTagEntity, UserTagDTO.class);
     }
 
     @Override
@@ -42,8 +47,7 @@ public class UsersTagService implements UserTagService {
         Type listType = new TypeToken<List<UserTagDTO>>() {
         }.getType();
         List<UserTagDTO> userTagDTOList = modelMapper.map(userTagEntity, listType);
-        UserTagListDTO response = new UserTagListDTO(userTagDTOList, offset, limit, usersTagsDAO.getAmountOfTags());
-        return response;
+        return new UserTagListDTO(userTagDTOList, offset, limit, usersTagsDAO.getAmountOfTags());
     }
 
     @Override
@@ -75,6 +79,21 @@ public class UsersTagService implements UserTagService {
         return id;
 
     }
+
+    @Override
+    public UserListDTO getUsersWithoutTag(Long limit, Long offset) {
+        UserListDTO userDTOList = userClient
+                .findAllWithLimitAndOffset(limit, offset);
+
+        List<UserDTO> userDTOListFiltered = userDTOList
+                .getResponse()
+                .stream()
+                .filter(element -> getAllWithParams(element.getId(), null, null).getResponse().isEmpty())
+                .collect(Collectors.toList());
+        userDTOList.setResponse(userDTOListFiltered);
+        return userDTOList;
+    }
+
 
     private void validateUserTag(UserTagDTO userTagDTO) throws BadRequestException {
         if (userTagDTO.getTag().isEmpty()) {
